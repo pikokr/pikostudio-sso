@@ -70,12 +70,6 @@ class ClientController
         return $clients->makeVisible('secret');
     }
 
-    /**
-     * Store a new client.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Passport\Client|array
-     */
     public function store(Request $request)
     {
         $this->validation->make($request->all(), [
@@ -89,20 +83,9 @@ class ClientController
             null, false, false, (bool) $request->input('confidential', true)
         );
 
-        if (Passport::$hashesClientSecrets) {
-            return ['plainSecret' => $client->plainSecret] + $client->toArray();
-        }
-
-        return $client->makeVisible('secret');
+        return back(303);
     }
 
-    /**
-     * Update the given client.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $clientId
-     * @return \Illuminate\Http\Response|\Laravel\Passport\Client
-     */
     public function update(Request $request, $clientId)
     {
         $client = $this->clients->findForUser($clientId, $request->user()->currnetTeam->id);
@@ -116,18 +99,13 @@ class ClientController
             'redirect' => ['required', $this->redirectRule],
         ])->validate();
 
-        return $this->clients->update(
+        $this->clients->update(
             $client, $request->name, $request->redirect
         );
+
+        return back(303);
     }
 
-    /**
-     * Delete the given client.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $clientId
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request, $clientId)
     {
         $client = $this->clients->findForUser($clientId, $request->user()->currentTeam->id);
@@ -138,6 +116,6 @@ class ClientController
 
         $this->clients->delete($client);
 
-        return new Response('', Response::HTTP_NO_CONTENT);
+        return back(303);
     }
 }
