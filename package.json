@@ -27,7 +27,6 @@
     "@nestjs/typeorm": "^7.1.5",
     "dotenv": "^10.0.0",
     "mysql2": "^2.2.5",
-    "nestjs-oauth2-server": "^1.1.21",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",

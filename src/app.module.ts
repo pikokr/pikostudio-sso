@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { Oauth2Module } from 'nestjs-oauth2-server'
-import { UserLoader } from './oauth2/user.loader'
-import { UserValidator } from './oauth2/user.validator'
+import { TypeOrmModule } from '@nestjs/typeorm'
 
 @Module({
   controllers: [AppController],
   providers: [AppService],
   imports: [
-    Oauth2Module.forRoot({
-      userLoader: new UserLoader(),
-      userValidator: new UserValidator(),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABSE,
+      entities: [],
+      synchronize: true,
     }),
   ],
 })
