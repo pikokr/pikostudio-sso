@@ -42,8 +42,9 @@ return [
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'token',
             'provider' => 'users',
+            'hash' => false,
         ],
     ],
 
@@ -96,6 +97,7 @@ return [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
+            'throttle' => 60,
         ],
     ],
 
@@ -110,6 +112,6 @@ return [
     |
     */
 
-//    'password_timeout' => 10800,
+    'password_timeout' => 10800,
 
 ];
