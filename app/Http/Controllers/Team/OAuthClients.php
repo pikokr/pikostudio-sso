@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Controllers\Team;
 
-use App\Http\Controllers\Passport\ClientController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Passport\ClientRepository;
 
