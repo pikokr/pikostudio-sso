@@ -52,6 +52,14 @@
                                                     Team Settings
                                                 </jet-dropdown-link>
 
+                                                <jet-dropdown-link :href="route('teams.clients', $page.props.user.current_team)">
+                                                    Manage OAuth Clients
+                                                </jet-dropdown-link>
+
+<!--                                                <jet-dropdown-link :href="route('teams.manageClients', $page.props.user.current_team)">-->
+<!--                                                    Manage Oauth2 Clients-->
+<!--                                                </jet-dropdown-link>-->
+
                                                 <jet-dropdown-link :href="route('teams.create')" v-if="$page.props.jetstream.canCreateTeams">
                                                     Create New Team
                                                 </jet-dropdown-link>
@@ -186,6 +194,10 @@
                                 <jet-responsive-nav-link :href="route('teams.show', $page.props.user.current_team)" :active="route().current('teams.show')">
                                     Team Settings
                                 </jet-responsive-nav-link>
+
+                                <jet-dropdown-link :href="route('teams.clients', $page.props.user.current_team)">
+                                    Manage OAuth Clients
+                                </jet-dropdown-link>
 
                                 <jet-responsive-nav-link :href="route('teams.create')" :active="route().current('teams.create')" v-if="$page.props.jetstream.canCreateTeams">
                                     Create New Team

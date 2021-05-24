@@ -27,3 +27,7 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+    Route::get('/teams/{team}/clients', 'App\Http\Controllers\Team\OAuthClients@main')->name('teams.clients');
+});
