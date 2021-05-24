@@ -1,6 +1,6 @@
 <template>
     <div>
-        <jet-form-section @submitted="addClient">
+        <jet-form-section @submitted="addClient" v-if="permissions.canManageClient">
             <template #title>
                 애플리케이션 추가하기
             </template>
@@ -59,6 +59,10 @@ export default {
 
             })
         }
-    }
+    },
+    props: [
+        'clients',
+        'permissions'
+    ]
 }
 </script>

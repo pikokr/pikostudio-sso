@@ -6,7 +6,8 @@
         </h2>
     </template>
     <div>
-        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8"><client-manager/>
+        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+            <client-manager :clients="clients" :permissions="permissions"/>
         </div>
     </div>
 </app-layout>
@@ -17,6 +18,7 @@ import AppLayout from "../../Layouts/AppLayout";
 import ClientManager from "./ClientManager";
 export default {
     components: {AppLayout, ClientManager},
+    props: ['clients', 'permissions']
 }
 </script>
 
