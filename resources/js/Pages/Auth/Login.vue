@@ -58,7 +58,7 @@
             JetInput,
             JetCheckbox,
             JetLabel,
-            JetValidationErrors
+            JetValidationErrors,
         },
 
         props: {
