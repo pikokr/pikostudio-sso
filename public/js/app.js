@@ -18823,7 +18823,12 @@ __webpack_require__.r(__webpack_exports__);
       this.authorizeForm["delete"](route('passport.authorizations.deny'));
     }
   },
-  props: ['client', 'scopes']
+  props: ['client', 'scopes', 'team'],
+  computed: {
+    host: function host() {
+      return new URL(this.client.redirect).host;
+    }
+  }
 });
 
 /***/ }),
@@ -23152,13 +23157,21 @@ var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 var _hoisted_9 = {
   "class": "text-lg mx-2 font-bold"
 };
-var _hoisted_10 = {
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("hr", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_11 = {
+  "class": "my-2 font-bold"
+};
+var _hoisted_12 = {
   "class": "flex gap-2"
 };
 
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 취소 ");
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 취소 ");
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 승인 ");
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 승인 ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_jet_authentication_card_logo = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-authentication-card-logo");
@@ -23182,7 +23195,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         )]);
       }), 256
       /* UNKEYED_FRAGMENT */
-      ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_button, {
+      ))]), _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, "개발자: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.team), 1
+      /* TEXT */
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, "인증 후 다음 위치로 이동합니다: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.host), 1
+      /* TEXT */
+      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_button, {
         onClick: $options.cancel,
         "class": ["flex-grow", {
           'opacity-25': $data.authorizeForm.processing || $data.cancelForm.processing
@@ -23190,7 +23207,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         disabled: $data.authorizeForm.processing || $data.cancelForm.processing
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_11];
+          return [_hoisted_13];
         }),
         _: 1
         /* STABLE */
@@ -23205,7 +23222,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         disabled: $data.authorizeForm.processing || $data.cancelForm.processing
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_12];
+          return [_hoisted_14];
         }),
         _: 1
         /* STABLE */

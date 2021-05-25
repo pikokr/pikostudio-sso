@@ -22,6 +22,11 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div class="my-2 font-bold">
+                    <p>개발자: {{team}}</p>
+                    <p>인증 후 다음 위치로 이동합니다: {{host}}</p>
+                </div>
             </div>
             <div class="flex gap-2">
                 <jet-button @click="cancel" class="flex-grow" :class="{ 'opacity-25': authorizeForm.processing || cancelForm.processing }" :disabled="authorizeForm.processing || cancelForm.processing">
@@ -64,7 +69,13 @@ export default {
     },
     props: [
         'client',
-        'scopes'
-    ]
+        'scopes',
+        'team'
+    ],
+    computed: {
+        host() {
+            return new URL(this.client.redirect).host
+        }
+    }
 }
 </script>

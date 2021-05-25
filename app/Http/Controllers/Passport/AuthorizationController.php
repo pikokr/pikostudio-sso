@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Passport;
 
+use App\Models\Team;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -51,6 +52,9 @@ class AuthorizationController
             return $this->approveRequest($authRequest, $user);
         }
 
+
+        $team = Jetstream::newTeamModel()->findOrFail($client->user_id);
+
         $request->session()->put('authToken', $authToken = Str::random());
         $request->session()->put('authRequest', $authRequest);
 
@@ -68,6 +72,7 @@ class AuthorizationController
             'scopes' => $scopes,
             'request' => $request,
             'authToken' => $authToken,
+            'team' => $team->name
         ]);
     }
 
