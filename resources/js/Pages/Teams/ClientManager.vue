@@ -105,7 +105,7 @@
             </template>
         </jet-dialog-modal>
 
-        <jet-confirmation-modal :show="confirmClientDelete" @close="confirmClientDelete = false">
+        <jet-confirmation-modal :show="!!confirmClientDelete" @close="confirmClientDelete = null">
             <template #title>
                 삭제하기
             </template>
@@ -115,7 +115,7 @@
             </template>
 
             <template #footer>
-                <jet-secondary-button @click="confirmClientDelete = false">
+                <jet-secondary-button @click="confirmClientDelete = null">
                     취소
                 </jet-secondary-button>
 
@@ -167,7 +167,7 @@ export default {
             }),
             clientDeleteForm: this.$inertia.form({}),
             client: null,
-            confirmClientDelete: false
+            confirmClientDelete: null
         }
     },
     methods: {
@@ -192,8 +192,15 @@ export default {
                 }
             })
         },
-        deleteClient() {
-            this.confirmClientDelete = true
+        deleteClient(client) {
+            this.confirmClientDelete = client
+        },
+        processClientDelete() {
+            this.clientDeleteForm.delete('/oauth/clients/' + this.confirmClientDelete.id, {
+                onSuccess: () => {
+                    this.confirmClientDelete = null
+                }
+            })
         }
     },
     props: [

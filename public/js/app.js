@@ -19400,7 +19400,7 @@ __webpack_require__.r(__webpack_exports__);
       }),
       clientDeleteForm: this.$inertia.form({}),
       client: null,
-      confirmClientDelete: false
+      confirmClientDelete: null
     };
   },
   methods: {
@@ -19430,8 +19430,17 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    deleteClient: function deleteClient() {
-      this.confirmClientDelete = true;
+    deleteClient: function deleteClient(client) {
+      this.confirmClientDelete = client;
+    },
+    processClientDelete: function processClientDelete() {
+      var _this3 = this;
+
+      this.clientDeleteForm["delete"]('/oauth/clients/' + this.confirmClientDelete.id, {
+        onSuccess: function onSuccess() {
+          _this3.confirmClientDelete = null;
+        }
+      });
     }
   },
   props: ['clients', 'permissions']
@@ -24706,9 +24715,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["show"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_confirmation_modal, {
-    show: $data.confirmClientDelete,
+    show: !!$data.confirmClientDelete,
     onClose: _cache[11] || (_cache[11] = function ($event) {
-      return $data.confirmClientDelete = false;
+      return $data.confirmClientDelete = null;
     })
   }, {
     title: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -24720,7 +24729,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_secondary_button, {
         onClick: _cache[10] || (_cache[10] = function ($event) {
-          return $data.confirmClientDelete = false;
+          return $data.confirmClientDelete = null;
         })
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -24733,7 +24742,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": ["ml-2", {
           'opacity-25': $data.clientDeleteForm.processing
         }],
-        onClick: _ctx.processClientDelete,
+        onClick: $options.processClientDelete,
         disabled: $data.clientDeleteForm.processing
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
