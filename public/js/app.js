@@ -24546,7 +24546,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: client.id
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
           "class": "w-8 h-8 rounded-full",
-          src: encodeURI('https://ui-avatars.com/api/?background=EBF4FF&name=' + client.name),
+          src: encodeURI('https://ui-avatars.com/api/?color=7F9CF5&background=EBF4FF&name=' + client.name),
           alt: client.name
         }, null, 8
         /* PROPS */

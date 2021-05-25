@@ -41,7 +41,7 @@
                         <div class="flex items-center justify-between" v-for="client in clients" :key="client.id">
                             <div class="flex items-center">
                                 <img class="w-8 h-8 rounded-full"
-                                     :src="encodeURI('https://ui-avatars.com/api/?background=EBF4FF&name=' + client.name)"
+                                     :src="encodeURI('https://ui-avatars.com/api/?color=7F9CF5&background=EBF4FF&name=' + client.name)"
                                      :alt="client.name">
                                 <div class="ml-4">{{ client.name }}</div>
                             </div>
