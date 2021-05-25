@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Passport;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 use League\OAuth2\Server\AuthorizationServer;
 use Nyholm\Psr7\Response as Psr7Response;
 
@@ -10,38 +12,25 @@ class ApproveAuthorizationController
 {
     use ConvertsPsrResponses, RetrievesAuthRequestFromSession;
 
-    /**
-     * The authorization server.
-     *
-     * @var \League\OAuth2\Server\AuthorizationServer
-     */
     protected $server;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \League\OAuth2\Server\AuthorizationServer  $server
-     * @return void
-     */
     public function __construct(AuthorizationServer $server)
     {
         $this->server = $server;
     }
 
-    /**
-     * Approve the authorization request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function approve(Request $request)
     {
         $this->assertValidAuthToken($request);
 
         $authRequest = $this->getAuthRequestFromSession($request);
+        $data = $this->server->completeAuthorizationRequest($authRequest, new Psr7Response);
 
-        return $this->convertResponse(
-            $this->server->completeAuthorizationRequest($authRequest, new Psr7Response)
-        );
+        return Inertia::location($data->getHeader('Location')[0]);
+
+
+//        return $this->convertResponse(
+//            $this->server->completeAuthorizationRequest($authRequest, new Psr7Response)
+//        );
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <jet-form-section @submitted="addClient" v-if="permissions.canManageClient">
+        <jet-form-section @submitted="addClient" v-if="permissions.canAddClient">
             <template #title>
                 애플리케이션 추가하기
             </template>
@@ -50,13 +50,13 @@
                                 <!-- Manage Team Member Role -->
                                 <button class="ml-2 text-sm text-gray-400"
                                         @click="(manageClient)(client)">
-                                    {{ permissions.canManageClient ? '관리' : '보기' }}
+                                    {{ permissions.canEditClient ? '관리' : '보기' }}
                                 </button>
 
                                 <!-- Remove Team Member -->
                                 <button class="cursor-pointer ml-6 text-sm text-red-500"
                                         @click="(deleteClient)(client)"
-                                        v-if="permissions.canManageClient">
+                                        v-if="permissions.canDeleteClient">
                                     제거
                                 </button>
                             </div>
@@ -74,27 +74,33 @@
             <template #content>
                 <div class="col-span-6 sm:col-span-4">
                     <jet-label for="edit_name" value="애플리케이션 이름"/>
-                    <jet-input :readonly="!permissions.canManageClient" v-model="manageClientForm.name" required id="edit_name" type="text" class="mt-1 block w-full"/>
+                    <jet-input :readonly="!permissions.canEditClient" v-model="manageClientForm.name" required id="edit_name" type="text" class="mt-1 block w-full"/>
                 </div>
                 <div class="col-span-6 sm:col-span-4">
                     <jet-label for="edit_redirect" value="리다이렉트 URL"/>
-                    <jet-input :readonly="!permissions.canManageClient" v-model="manageClientForm.redirect" required id="edit_redirect" type="url"
+                    <jet-input :readonly="!permissions.canEditClient" v-model="manageClientForm.redirect" required id="edit_redirect" type="url"
                                class="mt-1 block w-full"/>
                 </div>
                 <div class="col-span-6 sm:col-span-4">
-                    <jet-checkbox :readonly="!permissions.canManageClient" id="edit_confidential" v-model="manageClientForm.confidential"/>
-                    <label for="edit_confidential" class="ml-2">시크릿을 이용한 인증만 허용</label>
+                    <jet-label for="client_id" value="클라이언트 ID"/>
+                    <jet-input readonly v-model="client.id" required id="client_id" type="text"
+                               class="mt-1 block w-full"/>
+                </div>
+                <div class="col-span-6 sm:col-span-4">
+                    <jet-label for="secret" value="클라이언트 시크릿"/>
+                    <jet-input readonly v-model="client.secret" required id="secret" type="text"
+                               class="mt-1 block w-full"/>
                 </div>
             </template>
 
             <template #footer>
                 <jet-secondary-button @click="client = null">
-                    Cancel
+                    닫기
                 </jet-secondary-button>
 
                 <jet-button class="ml-2" @click="updateClient" :class="{ 'opacity-25': manageClientForm.processing }"
-                            :disabled="manageClientForm.processing">
-                    Save
+                            :disabled="manageClientForm.processing" v-if="permissions.canEditClient">
+                    저장
                 </jet-button>
             </template>
         </jet-dialog-modal>
@@ -151,11 +157,19 @@ export default {
             this.manageClientForm.redirect = client.redirect
             this.manageClientForm.confidential = client.confidential
             this.client = client
+        },
+        updateClient() {
+            this.manageClientForm.put('/oauth/clients/' + this.client.id, {
+                onSuccess: () => {
+                    this.client = null
+                    this.manageClientForm.reset()
+                }
+            })
         }
     },
     props: [
         'clients',
         'permissions'
-    ]
+    ],
 }
 </script>

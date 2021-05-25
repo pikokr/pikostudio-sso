@@ -16,11 +16,14 @@ class OAuthClients {
     public function main(Request $request, $teamId) {
         $team = Jetstream::newTeamModel()->findOrFail($teamId);
 
+        if (!$request->user()->hasTeamPermission($team, 'read')) return back(401);
 
         return Jetstream::inertia()->render($request, 'Teams/Clients', [
-            'clients' => $this->clients->activeForUser($request->user()->currentTeam->id),
+            'clients' => $this->clients->activeForUser($request->user()->currentTeam->id)->makeVisible('secret'),
             'permissions' => [
-                'canManageClient' => $request->user()->hasTeamPermission($team, 'create'),
+                'canAddClient' => $request->user()->hasTeamPermission($team, 'create'),
+                'canEditClient' => $request->user()->hasTeamPermission($team, 'update'),
+                'canDeleteClient' => $request->user()->hasTeamPermission($team, 'delete'),
             ],
         ]);
     }

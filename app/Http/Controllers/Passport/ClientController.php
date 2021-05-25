@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Laravel\Jetstream\Jetstream;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Http\Rules\RedirectRule;
 use Laravel\Passport\Passport;
@@ -72,6 +73,10 @@ class ClientController
 
     public function store(Request $request)
     {
+        $team = Jetstream::newTeamModel()->findOrFail($request->user()->currentTeam->id);
+
+        if (!$request->user()->hasTeamPermission($team, 'create')) return back(401);
+
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
             'redirect' => ['required', $this->redirectRule],
@@ -88,7 +93,13 @@ class ClientController
 
     public function update(Request $request, $clientId)
     {
-        $client = $this->clients->findForUser($clientId, $request->user()->currnetTeam->id);
+        $teamId = $request->user()->currentTeam->id;
+
+        $team = Jetstream::newTeamModel()->findOrFail($teamId);
+
+        if (!$request->user()->hasTeamPermission($team, 'update')) return back(401);
+
+        $client = $this->clients->findForUser($clientId, $teamId);
 
         if (! $client) {
             return new Response('', 404);
@@ -108,6 +119,10 @@ class ClientController
 
     public function destroy(Request $request, $clientId)
     {
+        $team = Jetstream::newTeamModel()->findOrFail($request->user()->currentTeam->id);
+
+        if (!$request->user()->hasTeamPermission($team, 'delete')) return back(401);
+
         $client = $this->clients->findForUser($clientId, $request->user()->currentTeam->id);
 
         if (! $client) {
