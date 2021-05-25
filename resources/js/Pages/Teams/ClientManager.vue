@@ -104,6 +104,26 @@
                 </jet-button>
             </template>
         </jet-dialog-modal>
+
+        <jet-confirmation-modal :show="confirmClientDelete" @close="confirmClientDelete = false">
+            <template #title>
+                삭제하기
+            </template>
+
+            <template #content>
+                애플리케이션을 삭제할까요?
+            </template>
+
+            <template #footer>
+                <jet-secondary-button @click="confirmClientDelete = false">
+                    취소
+                </jet-secondary-button>
+
+                <jet-danger-button class="ml-2" @click="processClientDelete" :class="{ 'opacity-25': clientDeleteForm.processing }" :disabled="clientDeleteForm.processing">
+                    삭제하기
+                </jet-danger-button>
+            </template>
+        </jet-confirmation-modal>
     </div>
 </template>
 <script>
@@ -116,6 +136,8 @@ import JetActionSection from '@/Jetstream/ActionSection'
 import JetSectionBorder from '@/Jetstream/SectionBorder'
 import JetDialogModal from '@/Jetstream/DialogModal'
 import JetSecondaryButton from '@/Jetstream/SecondaryButton'
+import JetConfirmationModal from '@/Jetstream/ConfirmationModal'
+import JetDangerButton from '@/Jetstream/DangerButton'
 
 export default {
     components: {
@@ -127,7 +149,9 @@ export default {
         JetActionSection,
         JetSectionBorder,
         JetDialogModal,
-        JetSecondaryButton
+        JetSecondaryButton,
+        JetDangerButton,
+        JetConfirmationModal
     },
     data() {
         return {
@@ -141,7 +165,9 @@ export default {
                 redirect: '',
                 confidential: true
             }),
-            client: null
+            clientDeleteForm: this.$inertia.form({}),
+            client: null,
+            confirmClientDelete: false
         }
     },
     methods: {
@@ -165,6 +191,9 @@ export default {
                     this.manageClientForm.reset()
                 }
             })
+        },
+        deleteClient() {
+            this.confirmClientDelete = true
         }
     },
     props: [
