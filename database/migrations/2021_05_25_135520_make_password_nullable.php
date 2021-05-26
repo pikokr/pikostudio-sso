@@ -13,7 +13,9 @@ class MakePasswordNullable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('password')->nullable()->change();
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ class MakePasswordNullable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('password')->nullable(false)->change();
+        });
     }
 }

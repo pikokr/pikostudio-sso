@@ -11,8 +11,9 @@ trait PasswordValidationRules
      *
      * @return array
      */
-    protected function passwordRules()
+    protected function passwordRules($auto)
     {
+        if ($auto) return ['string', new Password, 'confirmed'];
         return ['required', 'string', new Password, 'confirmed'];
     }
 }

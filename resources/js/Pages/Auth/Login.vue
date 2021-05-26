@@ -36,6 +36,12 @@
                 <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </jet-button>
+
+                <a href="/auth/discord">
+                    <jet-button class="ml-4" type="button">
+                        디스코드로 로그인
+                    </jet-button>
+                </a>
             </div>
         </form>
     </jet-authentication-card>

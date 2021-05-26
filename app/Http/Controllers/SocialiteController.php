@@ -4,11 +4,15 @@
 namespace App\Http\Controllers;
 
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Fortify;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -27,6 +31,11 @@ class SocialiteController
         ]);
     }
 
+    public function __construct(CreateNewUser $creator)
+    {
+        $this->creator = $creator;
+    }
+
     function discordCallback(Request $request)
     {
         $user = Socialite::driver('discord')->user();
@@ -43,15 +52,19 @@ class SocialiteController
             } else if ($u != null && $currentUser != null) {
                 $currentUser->discord_id = $user->id;
                 $currentUser->save();
-                return \redirect('/login');
+                return redirect('/login');
             }
         }
 
-        $u = User::create([
-            'name' => $user->id,
-            'email' => $user->email,
-            'discord_id' => $user->id
-        ]);
+        if ($u == null) {
+            $u = $this->creator->create([
+                'name' => $user->id,
+                'email' => $user->email,
+                'discord_id' => $user->id,
+                'password' => null,
+            ], true, true);
+            event(new Registered($u));
+        }
 
         auth()->login($u);
 
