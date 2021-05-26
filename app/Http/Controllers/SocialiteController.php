@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -18,6 +21,11 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController
 {
+    /**
+     * @var CreateNewUser
+     */
+    private $creator;
+
     function discord()
     {
         return Socialite::driver('discord')->with(['prompt' => 'none'])->redirect();
@@ -30,6 +38,15 @@ class SocialiteController
             'login' => $request->user() != null
         ]);
     }
+    protected function createTeam(User $user)
+    {
+        $user->ownedTeams()->save(Team::forceCreate([
+            'user_id' => $user->id,
+            'name' => explode(' ', $user->name, 2)[0] . "'s Team",
+            'personal_team' => true,
+        ]));
+    }
+
 
     public function __construct(CreateNewUser $creator)
     {
@@ -57,13 +74,27 @@ class SocialiteController
         }
 
         if ($u == null) {
-            $u = $this->creator->create([
+            $input = [
                 'name' => $user->id,
                 'email' => $user->email,
                 'discord_id' => $user->id,
                 'password' => null,
-            ], true, true);
-            event(new Registered($u));
+            ];
+
+            $u = DB::transaction(function () use ($user, $input) {
+                return tap(User::create([
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => null,
+                    'shouldUpdatePw' => true,
+                    'discord_id' => $user->id
+                ]), function (User $user) {
+                    $this->createTeam($user);
+                });
+            });
+
+            Log::info($u);
+
         }
 
         auth()->login($u);

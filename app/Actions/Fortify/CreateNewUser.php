@@ -22,23 +22,20 @@ class CreateNewUser implements CreatesNewUsers
      * @param array $input
      * @return \App\Models\User
      */
-    public function create(array $input, $auto = false, $shouldPasswordChange = false)
+    public function create(array $input)
     {
-        Log::info($input);
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $auto ? ['string', new Password, 'confirmed'] : ['required', 'string', new Password, 'confirmed'],
+            'password' => ['required', 'string', new Password, 'confirmed'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
-            'discord_id' => ['string']
         ])->validate();
 
-        return DB::transaction(function () use ($shouldPasswordChange, $input) {
+        return DB::transaction(function () use ($input) {
             return tap(User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-                'shouldUpdatePw' => $shouldPasswordChange,
             ]), function (User $user) {
                 $this->createTeam($user);
             });
