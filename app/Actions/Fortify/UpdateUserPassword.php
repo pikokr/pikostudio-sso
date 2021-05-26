@@ -23,8 +23,8 @@ class UpdateUserPassword implements UpdatesUserPasswords
             'current_password' => 'string|nullable',
             'password' => $this->passwordRules(),
         ])->after(function ($validator) use ($user, $input) {
-            if (!(!isset($input['current_password']) && !isset($user->password))) {
-                if (! isset($input['current_password']) || ! Hash::check($input['current_password'], $user->password)) {
+            if ($user->shouldUpdatePassword) {
+                if (! isset($input['current_password']) || ! Hash::check($input['current_password'], $user->password && $user->shouldUpdatePw)) {
                     $validator->errors()->add('current_password', __('The provided password does not match your current password.'));
                 }
             }
@@ -32,6 +32,7 @@ class UpdateUserPassword implements UpdatesUserPasswords
 
         $user->forceFill([
             'password' => Hash::make($input['password']),
+            'shouldUpdatePw' => false,
         ])->save();
     }
 }

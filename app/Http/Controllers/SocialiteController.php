@@ -7,15 +7,8 @@ namespace App\Http\Controllers;
 use App\Actions\Fortify\CreateNewUser;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Fortify\Fortify;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Socialite\Facades\Socialite;
 

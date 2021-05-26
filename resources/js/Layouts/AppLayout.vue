@@ -234,7 +234,12 @@
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main v-if="$page.props.user.shouldUpdatePw">
+                <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                <UpdatePassword/>
+                </div>
+            </main>
+            <main v-else>
                 <slot></slot>
             </main>
         </div>
@@ -248,9 +253,11 @@
     import JetDropdownLink from '@/Jetstream/DropdownLink'
     import JetNavLink from '@/Jetstream/NavLink'
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
+    import UpdatePassword from "./UpdatePassword";
 
     export default {
         components: {
+            UpdatePassword,
             JetApplicationMark,
             JetBanner,
             JetDropdown,

@@ -20,6 +20,10 @@
                     <jet-section-border />
                 </div>
 
+                <connections/>
+
+                <jet-section-border/>
+
                 <div v-if="$page.props.jetstream.canManageTwoFactorAuthentication">
                     <two-factor-authentication-form class="mt-10 sm:mt-0" />
 
@@ -46,11 +50,13 @@
     import TwoFactorAuthenticationForm from './TwoFactorAuthenticationForm'
     import UpdatePasswordForm from './UpdatePasswordForm'
     import UpdateProfileInformationForm from './UpdateProfileInformationForm'
+    import Connections from './Connections'
 
     export default {
         props: ['sessions'],
 
         components: {
+            Connections,
             AppLayout,
             DeleteUserForm,
             JetSectionBorder,
