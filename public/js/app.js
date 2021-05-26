@@ -19020,6 +19020,16 @@ __webpack_require__.r(__webpack_exports__);
     JetSecondaryButton: _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_8__.default,
     JetDangerButton: _Jetstream_DangerButton__WEBPACK_IMPORTED_MODULE_10__.default,
     JetConfirmationModal: _Jetstream_ConfirmationModal__WEBPACK_IMPORTED_MODULE_9__.default
+  },
+  methods: {
+    unlinkDiscord: function unlinkDiscord() {
+      this.unlinkDiscordForm["delete"]('/auth/discord');
+    }
+  },
+  data: function data() {
+    return {
+      unlinkDiscordForm: this.$inertia.form()
+    };
   }
 });
 
@@ -23782,10 +23792,6 @@ var _hoisted_6 = {
   href: "/auth/discord",
   "class": "ml-2 text-sm text-gray-400"
 };
-var _hoisted_7 = {
-  key: 0,
-  "class": "ml-2 text-sm text-gray-400"
-};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_jet_section_border = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-section-border");
 
@@ -23800,7 +23806,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     content: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$page.props.user.discord_id ? '계정 이전' : '연동하기'), 1
       /* TEXT */
-      ), _ctx.$page.props.user.discord_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", _hoisted_7, " 연동 해제 ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])];
+      ), _ctx.$page.props.user.discord_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
+        key: 0,
+        onClick: _cache[1] || (_cache[1] = function () {
+          return $options.unlinkDiscord && $options.unlinkDiscord.apply($options, arguments);
+        }),
+        "class": "ml-2 text-sm text-gray-400"
+      }, " 연동 해제 ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])];
     }),
     _: 1
     /* STABLE */

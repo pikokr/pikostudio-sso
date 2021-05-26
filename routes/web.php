@@ -26,7 +26,7 @@ Route::get('/', function () {
 
 Route::get('/auth/discord', 'App\Http\Controllers\SocialiteController@discord');
 Route::get('/auth/discord/callback', 'App\Http\Controllers\SocialiteController@discordCallback');
-Route::delete('/auth/discord', 'App\Http\Controllers\SocialiteController@unlink');
+Route::delete('/auth/discord', 'App\Http\Controllers\SocialiteController@discordUnlink');
 Route::get('/auth/error', 'App\Http\Controllers\SocialiteController@error')->name('auth.error');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

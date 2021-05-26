@@ -13,9 +13,11 @@ use Laravel\Passport\Bridge\User;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Passport;
 use Laravel\Passport\TokenRepository;
+use Laravel\Socialite\Facades\Socialite;
 use League\OAuth2\Server\AuthorizationServer;
 use Nyholm\Psr7\Response as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface;
+use SebastianBergmann\Environment\Console;
 
 class AuthorizationController
 {
@@ -40,7 +42,16 @@ class AuthorizationController
             return $this->server->validateAuthorizationRequest($psrRequest);
         });
 
+
+        $user = $request->user();
+
         $scopes = $this->parseScopes($authRequest);
+
+        if (array_map(function ($i) {
+                return $i->id;
+            }, $scopes) && !$user->discord_id) {
+            return Socialite::driver('discord')->stateless()->with(['state' => $request->fullUrl()])->redirect();
+        }
 
         $token = $tokens->findValidToken(
             $user = $request->user(),

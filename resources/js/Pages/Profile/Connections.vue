@@ -19,7 +19,7 @@
                             <a href="/auth/discord" class="ml-2 text-sm text-gray-400">
                                 {{$page.props.user.discord_id ? '계정 이전' : '연동하기'}}
                             </a>
-                            <button v-if="$page.props.user.discord_id" class="ml-2 text-sm text-gray-400">
+                            <button v-if="$page.props.user.discord_id" @click="unlinkDiscord" class="ml-2 text-sm text-gray-400">
                                 연동 해제
                             </button>
                         </div>
@@ -56,7 +56,17 @@ export default {
         JetDialogModal,
         JetSecondaryButton,
         JetDangerButton,
-        JetConfirmationModal
+        JetConfirmationModal,
+    },
+    methods: {
+        unlinkDiscord() {
+            this.unlinkDiscordForm.delete('/auth/discord')
+        }
+    },
+    data() {
+        return {
+            unlinkDiscordForm: this.$inertia.form(),
+        }
     }
 }
 </script>

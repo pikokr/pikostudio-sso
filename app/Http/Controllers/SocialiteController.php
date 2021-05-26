@@ -9,6 +9,7 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Socialite\Facades\Socialite;
 use function redirect;
@@ -22,7 +23,7 @@ class SocialiteController
 
     function discord()
     {
-        return Socialite::driver('discord')->with(['prompt' => 'none'])->redirect();
+        return Socialite::driver('discord')->stateless()->redirect();
     }
 
     function error(Request $request)
@@ -56,11 +57,13 @@ class SocialiteController
 
     function discordCallback(Request $request)
     {
-        $user = Socialite::driver('discord')->user();
+        $user = Socialite::driver('discord')->stateless()->user();
 
         $u = User::where('discord_id', $user->id)->first();
 
         $currentUser = $request->user();
+
+        $redirect = $request->query('state');
 
         if ($u == null) {
             $u = User::where('email', $user->email)->first();
@@ -68,9 +71,13 @@ class SocialiteController
             if ($u != null && $currentUser == null) {
                 return redirect()->route('auth.error', ['message' => '이 디스코드 계정이 사용하는 이메일로 가입된 계정이 이미 존재합니다. 디스코드 로그인을 이용하시려면 기존 계정에 디스코드 계정을 연결해주세요.']);
             } else if ($u != null && $currentUser != null) {
+                if ($u->discord_id != $user->id && User::where('discord_id', $user->id)->first()) {
+                    return redirect()->route('auth.error', ['message' => '이 디스코드 계정에 연동된 계정이 이미 존재합니다. 다른 디스코드 계정을 사용하거나 기존 계정의 연동을 해제해주세요.']);
+                }
+
                 $currentUser->discord_id = $user->id;
                 $currentUser->save();
-                return redirect('/login');
+                return redirect($redirect ?: '/login');
             }
         }
 
@@ -95,7 +102,7 @@ class SocialiteController
             });
 
             auth()->login($u);
-            return redirect('/user/profile');
+            return redirect($redirect ?: '/user/profile');
         }
 
         auth()->login($u);
