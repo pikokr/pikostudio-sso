@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Socialite\Facades\Socialite;
+use function redirect;
 
 class SocialiteController
 {
@@ -44,6 +45,13 @@ class SocialiteController
     public function __construct(CreateNewUser $creator)
     {
         $this->creator = $creator;
+    }
+
+    function discordUnlink(Request $request) {
+        $user = $request->user();
+        $user->discord_id = null;
+        $user->save();
+        return back(303);
     }
 
     function discordCallback(Request $request)
@@ -87,11 +95,11 @@ class SocialiteController
             });
 
             auth()->login($u);
-            return \redirect('/user/profile');
+            return redirect('/user/profile');
         }
 
         auth()->login($u);
 
-        return \redirect('/login');
+        return redirect('/login');
     }
 }
