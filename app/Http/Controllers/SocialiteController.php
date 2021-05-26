@@ -93,8 +93,8 @@ class SocialiteController
                 });
             });
 
-            Log::info($u);
-
+            auth()->login($u);
+            return \redirect('/user/profile');
         }
 
         auth()->login($u);
