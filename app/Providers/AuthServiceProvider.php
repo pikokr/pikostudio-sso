@@ -28,13 +28,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::routes(null, [
-            'namespace' => 'App\Http\Controllers\Passport'
-        ]);
-
         Passport::tokensCan([
             'discord' => '디스코드 ID 확인하기',
             'identify' => '계정 정보 보기'
+        ]);
+
+        Passport::routes(null, [
+            'namespace' => 'App\Http\Controllers\Passport'
         ]);
     }
 }

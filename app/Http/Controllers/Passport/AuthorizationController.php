@@ -53,15 +53,19 @@ class AuthorizationController
             return Socialite::driver('discord')->stateless()->with(['state' => $request->fullUrl()])->redirect();
         }
 
-        $token = $tokens->findValidToken(
-            $user = $request->user(),
-            $client = $clients->find($authRequest->getClient()->getIdentifier())
-        );
+//        $token = $tokens->findValidToken(
+//            $user = $request->user(),
+//        );
 
-        if (($token && $token->scopes === collect($scopes)->pluck('id')->all()) ||
-            $client->skipsAuthorization()) {
-            return $this->approveRequest($authRequest, $user);
-        }
+        $client = $clients->find($authRequest->getClient()->getIdentifier());
+
+
+//        Log::info($token->scopes);
+//
+//        if (($token && $token->scopes === collect($scopes)->pluck('id')->all()) ||
+//            $client->skipsAuthorization()) {
+//            return $this->approveRequest($authRequest, $user);
+//        }
 
 
         $team = Jetstream::newTeamModel()->findOrFail($client->user_id);
