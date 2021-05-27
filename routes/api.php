@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware(['auth:api', 'scope:identify'])->get('/user', function (Request $request) {
     $user = $request->user();
     if (!$user->tokenCan('discord')) {
         $user = $user->makeHidden('discord_id');
