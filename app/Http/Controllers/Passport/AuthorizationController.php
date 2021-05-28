@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Passport;
 
-use App\Models\Team;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Jetstream\Jetstream;
@@ -17,7 +15,6 @@ use Laravel\Socialite\Facades\Socialite;
 use League\OAuth2\Server\AuthorizationServer;
 use Nyholm\Psr7\Response as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface;
-use SebastianBergmann\Environment\Console;
 
 class AuthorizationController
 {
